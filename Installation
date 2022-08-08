@@ -1,0 +1,252 @@
+Install Ubuntu 20.04
+
+Update your system packages and dependencies
+
+sudo apt-get update -y && sudo apt-get upgrade -y
+
+Install some required and necessary software prerequisites
+
+sudo apt install git curl libffi-dev python3-minimal build-essential python3-distutils python3-setuptools python3-pip python3-testresources libssl-dev wkhtmltopdf redis -y 
+
+// Output - Full install no errors 
+
+Import MariaDB 10.5 gpg key
+sudo apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
+
+// Output
+
+Executing: /tmp/apt-key-gpghome.zs3Z1AeEVj/gpg.1.sh --fetch-keys https://mariadb.org/mariadb_release_signing_key.asc
+gpg: requesting key from 'https://mariadb.org/mariadb_release_signing_key.asc'
+gpg: key F1656F24C74CD1D8: public key "MariaDB Signing Key <signing-key@mariadb.org>" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+
+
+Add MariaDB 10.5 Apt repository
+After importing the GPG key, add the APT repository by running the following command:
+
+sudo add-apt-repository 'deb [arch=amd64] http://mariadb.mirror.globo.tech/repo/10.5/ubuntu focal main'
+
+// Output
+
+Hit:1 http://europe-west2.gce.archive.ubuntu.com/ubuntu focal InRelease
+Hit:2 http://europe-west2.gce.archive.ubuntu.com/ubuntu focal-updates InRelease
+Hit:3 http://europe-west2.gce.archive.ubuntu.com/ubuntu focal-backports InRelease
+Get:4 http://security.ubuntu.com/ubuntu focal-security InRelease [114 kB]
+Get:5 http://mariadb.mirror.globo.tech/repo/10.5/ubuntu focal InRelease [6264 B]
+Get:6 http://mariadb.mirror.globo.tech/repo/10.5/ubuntu focal/main amd64 Packages [17.4 kB]
+Fetched 137 kB in 1s (222 kB/s)
+Reading package lists... Done
+
+Install MariaDB 10.5 Server & MariaDB client
+// Run update first to refresh repo's
+
+sudo apt update -y
+sudo apt install mariadb-server mariadb-client -y
+
+Secure your MariaDB Server
+
+sudo mysql_secure_installation
+
+// Output
+
+
+NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB
+      SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!
+
+In order to log into MariaDB to secure it, we'll need the current
+password for the root user. If you've just installed MariaDB, and
+haven't set the root password yet, you should just press enter here.
+
+Enter current password for root (enter for none):
+OK, successfully used password, moving on...
+
+Setting the root password or using the unix_socket ensures that nobody
+can log into the MariaDB root user without the proper authorisation.
+
+You already have your root account protected, so you can safely answer 'n'.
+
+Switch to unix_socket authentication [Y/n] Y
+Enabled successfully!
+Reloading privilege tables..
+ ... Success!
+
+
+You already have your root account protected, so you can safely answer 'n'.
+
+Change the root password? [Y/n] Y
+New password:
+Re-enter new password:
+Password updated successfully!
+Reloading privilege tables..
+ ... Success!
+
+
+By default, a MariaDB installation has an anonymous user, allowing anyone
+to log into MariaDB without having to have a user account created for
+them.  This is intended only for testing, and to make the installation
+go a bit smoother.  You should remove them before moving into a
+production environment.
+
+Remove anonymous users? [Y/n] Y
+ ... Success!
+
+Normally, root should only be allowed to connect from 'localhost'.  This
+ensures that someone cannot guess at the root password from the network.
+
+Disallow root login remotely? [Y/n] Y
+ ... Success!
+
+By default, MariaDB comes with a database named 'test' that anyone can
+access.  This is also intended only for testing, and should be removed
+before moving into a production environment.
+
+Remove test database and access to it? [Y/n] Y
+ - Dropping test database...
+ ... Success!
+ - Removing privileges on test database...
+ ... Success!
+
+Reloading the privilege tables will ensure that all changes made so far
+will take effect immediately.
+
+Reload privilege tables now? [Y/n] Y
+ ... Success!
+
+Cleaning up...
+
+All done!  If you've completed all of the above steps, your MariaDB
+installation should now be secure.
+
+Thanks for using MariaDB!
+
+Edit the MariaDB config file & save
+
+sudo nano /etc/mysql/my.cnf
+
+# Add below items at the end of the my.cnf file
+
+[mysqld]
+character-set-client-handshake = FALSE
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+
+[mysql]
+default-character-set = utf8mb4
+
+Restart MariaDB server and check status of MariaDB
+
+sudo systemctl restart mysql
+sudo systemctl status mysql
+
+Test login to MariaDB shell using mysql command
+
+sudo mysql -u root -p
+
+Install Node Version Manager (NVM)
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+
+// Run following command to reload .bashrc file after editing
+
+source ~/.bashrc
+
+Test if NVM installed correctly
+
+command -v nvm
+// Output
+
+nvm
+
+Install node.js version 14 using NVM
+
+ nvm install 14
+ 
+ node -v
+ 
+Install yarn via npm
+
+npm install -g yarn
+
+
+alias python=python3
+alias pip=pip3
+
+sudo pip3 install frappe-bench
+
+If bench --version is not found .
+2 ways :-
+
+1.Restart the ubuntu sometime path didn't get updated after installation .
+2. use Command -
+
+export PATH = $PATH:~/.local/bin
+
+If python virtual enviornment issue raised .
+
+cmd -> sudo apt install python3.8-venv
+
+Installing the bench 
+
+bench init --frappe-branch version-13 frappe-bench
+
+bench start
+
+creating new site 
+
+bench new-site [site]
+
+creating app (everest)
+
+bench get-app [app name] [app URL]
+
+nagivate to frappe in apps 
+
+git remote
+
+// output 
+upstream
+
+git remote remove upstream
+
+git remote add origin [URL]
+
+git branch fetch --all
+
+git branch -r
+
+git checkout [branch name]
+
+git pull --all
+
+STAY IN FRAPPE FOLDER 
+
+Update the vue-template-compiler from 2.6.11 to 2.6.12
+
+cmd-> yarn add vue-template-compiler@2.6.12 --save-dev
+
+Link the Apps to the site
+
+bench --site [SITE] install-app [App name]
+
+To confirm if the app was installed, run the following command:
+
+bench --site [SITE] list-apps
+
+Migrate the bench 
+
+bench --site {site} migrate
+
+Navigate to apps folder and clone the everest-frontend
+
+cmd -> git clone [URL]
+
+install the dependence
+
+cmd-> Yarn install
+
+RUN THE BENCH & VUE 
+
+bench start 
+yarn dev
+
